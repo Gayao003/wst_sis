@@ -37,9 +37,42 @@ class EnrollmentController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'subject_id' => 'required|exists:subjects,id',
-            'school_year' => 'required|string',
+            'start_year' => [
+                'required',
+                'digits:4',
+                function ($attribute, $value, $fail) use ($request) {
+                    $endYear = $request->input('end_year');
+                    if ($value >= $endYear) {
+                        $fail('Start year must be less than end year.');
+                    }
+                }
+            ],
+            'end_year' => [
+                'required',
+                'digits:4',
+            ],
             'semester' => 'required|in:First,Second,Summer',
+        ], [
+            'start_year.digits' => 'Please enter a valid year.',
+            'end_year.digits' => 'Please enter a valid year.',
         ]);
+
+        // Check for duplicate enrollment
+        $exists = Enrollment::where('student_id', $validated['student_id'])
+            ->where('subject_id', $validated['subject_id'])
+            ->exists();
+
+        if ($exists) {
+            return back()->withErrors([
+                'enrollment' => 'Student is already enrolled in this subject.'
+            ])->withInput();
+        }
+
+        // Combine the years into the school_year format
+        $validated['school_year'] = $validated['start_year'] . '-' . $validated['end_year'];
+        
+        // Remove the individual year fields
+        unset($validated['start_year'], $validated['end_year']);
 
         Enrollment::create($validated);
 
@@ -71,9 +104,28 @@ class EnrollmentController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'subject_id' => 'required|exists:subjects,id',
-            'school_year' => 'required|string',
+            'start_year' => [
+                'required',
+                'digits:4',
+                function ($attribute, $value, $fail) use ($request) {
+                    $endYear = $request->input('end_year');
+                    if ($value >= $endYear) {
+                        $fail('Start year must be less than end year.');
+                    }
+                }
+            ],
+            'end_year' => [
+                'required',
+                'digits:4',
+            ],
             'semester' => 'required|in:First,Second,Summer',
         ]);
+
+        // Combine the years into the school_year format
+        $validated['school_year'] = $validated['start_year'] . '-' . $validated['end_year'];
+        
+        // Remove the individual year fields
+        unset($validated['start_year'], $validated['end_year']);
 
         $enrollment->update($validated);
 

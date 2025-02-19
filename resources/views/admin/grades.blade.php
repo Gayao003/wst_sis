@@ -16,28 +16,28 @@
             <table id="gradesTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Student</th>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
                         <th>Subject</th>
                         <th>School Year</th>
                         <th>Semester</th>
                         <th>Midterm</th>
                         <th>Final</th>
-                        <th>Grade</th>
-                        <th>Remarks</th>
+                        <th>Total Grade</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($enrollments as $enrollment)
                     <tr>
-                        <td>{{ $enrollment->student->user->name }}</td>
+                        <td>{{ $enrollment->student->student_id }}</td>
+                        <td>{{ $enrollment->student->user->first_name }} {{ $enrollment->student->user->last_name }}</td>
                         <td>{{ $enrollment->subject->name }}</td>
                         <td>{{ $enrollment->school_year }}</td>
                         <td>{{ $enrollment->semester }}</td>
                         <td>{{ $enrollment->grade->midterm ?? '' }}</td>
                         <td>{{ $enrollment->grade->final ?? '' }}</td>
-                        <td>{{ $enrollment->grade->grade ?? '' }}</td>
-                        <td>{{ $enrollment->grade->remarks ?? '' }}</td>
+                        <td>{{ $enrollment->grade->total_grade ?? '' }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editGradeModal{{ $enrollment->id }}">
                                 <i class="fas fa-edit"></i>
@@ -60,7 +60,7 @@
                 <h5 class="modal-title">Update Grade</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.grades.update', $enrollment->grade->id ?? 'new') }}" method="POST">
+            <form action="{{ route('admin.grades.store') }}" method="POST">
                 @csrf
                 @if($enrollment->grade)
                     @method('PUT')

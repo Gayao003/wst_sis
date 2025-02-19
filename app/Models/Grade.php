@@ -11,8 +11,7 @@ class Grade extends Model
         'enrollment_id',
         'midterm',
         'final',
-        'grade',
-        'remarks'
+        'total_grade'
     ];
 
     public function enrollment(): BelongsTo
@@ -26,19 +25,7 @@ class Grade extends Model
 
         static::saving(function ($grade) {
             if ($grade->midterm && $grade->final) {
-                $grade->grade = ($grade->midterm + $grade->final) / 2;
-                
-                // BukSU Grading System
-                if ($grade->grade >= 97) $grade->remarks = '1.00';
-                elseif ($grade->grade >= 94) $grade->remarks = '1.25';
-                elseif ($grade->grade >= 91) $grade->remarks = '1.50';
-                elseif ($grade->grade >= 88) $grade->remarks = '1.75';
-                elseif ($grade->grade >= 85) $grade->remarks = '2.00';
-                elseif ($grade->grade >= 82) $grade->remarks = '2.25';
-                elseif ($grade->grade >= 79) $grade->remarks = '2.50';
-                elseif ($grade->grade >= 76) $grade->remarks = '2.75';
-                elseif ($grade->grade >= 75) $grade->remarks = '3.00';
-                else $grade->remarks = '5.00';
+                $grade->total_grade = ($grade->midterm + $grade->final) / 2;
             }
         });
     }

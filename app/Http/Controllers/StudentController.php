@@ -37,7 +37,12 @@ class StudentController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|string|max:13',
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{3} [0-9]{4} [0-9]{3}$/',
+                'max:13'
+            ],
             'birth_date' => 'required|date',
             'address' => 'required|string',
             'course' => 'required|string',
@@ -97,7 +102,12 @@ class StudentController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $student->user_id,
-            'phone' => 'required|string|max:13',
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{3} [0-9]{4} [0-9]{3}$/',
+                'max:13'
+            ],
             'birth_date' => 'required|date',
             'address' => 'required|string',
             'course' => 'required|string',
@@ -133,6 +143,11 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        if ($student->enrollments()->exists()) {
+            return redirect()->route('admin.students.index')
+                ->with('error', 'Cannot delete student with existing enrollments. Please remove enrollments first.');
+        }
+
         $student->user->delete(); // This will cascade delete the student record
         return redirect()->route('admin.students.index')
             ->with('success', 'Student deleted successfully');

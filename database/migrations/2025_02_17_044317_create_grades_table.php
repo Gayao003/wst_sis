@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('enrollment_id')->constrained()->onDelete('cascade');
             $table->decimal('midterm', 5, 2)->nullable();
-            $table->decimal('finals', 5, 2)->nullable();
-            $table->decimal('final_grade', 5, 2)->nullable();
+            $table->decimal('final', 5, 2)->nullable();
+            $table->decimal('total_grade', 5, 2)->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

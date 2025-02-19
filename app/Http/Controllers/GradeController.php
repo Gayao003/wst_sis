@@ -31,7 +31,16 @@ class GradeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'enrollment_id' => 'required|exists:enrollments,id',
+            'midterm' => 'required|numeric|min:0|max:100',
+            'final' => 'required|numeric|min:0|max:100',
+        ]);
+
+        Grade::create($validated);
+
+        return redirect()->route('admin.grades.index')
+            ->with('success', 'Grade created successfully');
     }
 
     /**

@@ -39,13 +39,19 @@
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editStudentModal{{ $student->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this student?')">
+                            @if(!$student->enrollments()->exists())
+                                <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this student?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button class="btn btn-danger btn-sm" disabled title="Cannot delete enrolled student">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                            </form>
+                            @endif
                         </td>
                     </tr>
                     
@@ -75,7 +81,18 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control" name="phone" value="{{ $student->user->phone }}" required>
+                                            <div class="input-group">
+                                                <span class="input-group-text">+63</span>
+                                                <input class="form-control phone-input" 
+                                                       id="editPhone{{ $student->id }}" 
+                                                       type="tel" 
+                                                       name="phone" 
+                                                       value="{{ $student->user->phone }}" 
+                                                       placeholder="XXX XXXX XXX" 
+                                                       pattern="[0-9]{3} [0-9]{4} [0-9]{3}"
+                                                       maxlength="13"
+                                                       required />
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Birth Date</label>
@@ -138,7 +155,18 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" required>
+                        <div class="input-group">
+                            <span class="input-group-text">+63</span>
+                            <input class="form-control phone-input" 
+                                   id="addPhone" 
+                                   type="tel" 
+                                   name="phone" 
+                                   value="{{ old('phone') }}" 
+                                   placeholder="XXX XXXX XXX" 
+                                   pattern="[0-9]{3} [0-9]{4} [0-9]{3}"
+                                   maxlength="13"
+                                   required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Birth Date</label>
@@ -183,6 +211,28 @@ $(document).ready(function() {
         ]
     });
 
+    // Phone number formatting
+    $('.phone-input').on('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 9) value = value.slice(0, 9);
+        
+        let formattedValue = '';
+        if (value.length >= 3) {
+            formattedValue += value.slice(0, 3) + ' ';
+        } else {
+            formattedValue += value;
+        }
+        
+        if (value.length >= 7) {
+            formattedValue += value.slice(3, 7) + ' ';
+            formattedValue += value.slice(7);
+        } else if (value.length > 3) {
+            formattedValue += value.slice(3);
+        }
+        
+        e.target.value = formattedValue;
+    });
+
     // Show validation errors in modals if they exist
     @if($errors->any())
         var modal = new bootstrap.Modal(document.getElementById('addStudentModal'));
@@ -190,4 +240,19 @@ $(document).ready(function() {
     @endif
 });
 </script>
+@endpush
+
+@push('styles')
+<style>
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+    .input-group .form-control {
+        border-left: none;
+    }
+    .phone-label {
+        margin-left: 40px;
+    }
+</style>
 @endpush
