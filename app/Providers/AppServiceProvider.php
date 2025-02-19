@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blade::directive('getCurrentSemester', function () {
+            return "<?php
+                \$month = date('n');
+                if (\$month >= 6 && \$month <= 10) {
+                    echo 'First';
+                } elseif (\$month >= 11 || \$month <= 3) {
+                    echo 'Second';
+                } else {
+                    echo 'Summer';
+                }
+            ?>";
+        });
     }
 }

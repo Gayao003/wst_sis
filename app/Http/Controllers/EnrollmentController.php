@@ -146,8 +146,8 @@ class EnrollmentController extends Controller
     public function studentShow(): View
     {
         $enrollments = Enrollment::where('student_id', auth()->user()->student->id)
-            ->with(['subject'])
+            ->with(['subject', 'grade'])
             ->get();
-        return view('student.enrollment', compact('enrollments'));
+        return view('student.enrollments', compact('enrollments'));
     }
 }

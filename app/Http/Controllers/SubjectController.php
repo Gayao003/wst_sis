@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\Enrollment;
 
 class SubjectController extends Controller
 {
@@ -93,7 +94,9 @@ class SubjectController extends Controller
 
     public function studentIndex(): View
     {
-        $subjects = Subject::all();
-        return view('student.subjects.index', compact('subjects'));
+        $enrollments = Enrollment::where('student_id', auth()->user()->student->id)
+            ->with(['subject', 'grade'])
+            ->get();
+        return view('student.subjects', compact('enrollments'));
     }
 }

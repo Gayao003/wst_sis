@@ -152,4 +152,51 @@ class StudentController extends Controller
         return redirect()->route('admin.students.index')
             ->with('success', 'Student deleted successfully');
     }
+
+    public function dashboard()
+    {
+        $student = auth()->user()->student;
+        
+        // Get current enrollment data
+        $currentEnrollments = $student->enrollments()
+            ->where('school_year', date('Y').'-'.(date('Y')+1))
+            ->where('semester', getCurrentSemester())
+            ->with('subject')
+            ->get();
+        
+        $currentUnits = $currentEnrollments->sum('subject.units');
+        
+        // Get academic progress
+        $totalSubjects = $student->enrollments()->count();
+        $passedSubjects = $student->enrollments()
+            ->whereHas('grade', function($query) {
+                $query->where('total_grade', '<=', 3.0);
+            })
+            ->count();
+        
+        // Calculate GPA
+        $grades = $student->enrollments()
+            ->whereHas('grade')
+            ->with('grade')
+            ->get();
+        
+        $gpa = $grades->avg('grade.total_grade');
+        
+        // Get recent grades
+        $recentGrades = $student->enrollments()
+            ->whereHas('grade')
+            ->with(['grade', 'subject'])
+            ->latest()
+            ->take(5)
+            ->get()
+            ->pluck('grade');
+
+        return view('student.dashboard', compact(
+            'currentUnits',
+            'totalSubjects',
+            'passedSubjects',
+            'gpa',
+            'recentGrades'
+        ));
+    }
 }

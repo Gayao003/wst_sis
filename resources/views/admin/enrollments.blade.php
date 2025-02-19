@@ -82,7 +82,7 @@
                                             <select class="form-select" name="student_id" required>
                                                 @foreach($students as $student)
                                                     <option value="{{ $student->id }}" {{ $enrollment->student_id == $student->id ? 'selected' : '' }}>
-                                                        {{ $student->student_id }} - {{ $student->user->name }}
+                                                        {{ $student->student_id }} - {{ $student->user->first_name }} {{ $student->user->last_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -165,7 +165,9 @@
                         <label class="form-label">Student</label>
                         <select class="form-select" name="student_id" required>
                             @foreach($students as $student)
-                                <option value="{{ $student->id }}">{{ $student->student_id }} - {{ $student->user->name }}</option>
+                                <option value="{{ $student->id }}">
+                                    {{ $student->student_id }} - {{ $student->user->first_name }} {{ $student->user->last_name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
