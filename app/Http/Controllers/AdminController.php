@@ -72,4 +72,30 @@ class AdminController extends Controller
     {
         //
     }
+
+    public function dashboard()
+    {
+        $totalStudents = \App\Models\Student::count();
+        $totalSubjects = \App\Models\Subject::count();
+        $totalEnrollments = \App\Models\Enrollment::count();
+        
+        // Calculate passing rate
+        $totalGrades = \App\Models\Grade::count();
+        $passingGrades = \App\Models\Grade::where('total_grade', '<=', 3.00)->count();
+        $passingRate = $totalGrades > 0 ? ($passingGrades / $totalGrades) * 100 : 0;
+        
+        // Get recent enrollments
+        $recentEnrollments = \App\Models\Enrollment::with(['student.user', 'subject'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalStudents',
+            'totalSubjects',
+            'totalEnrollments',
+            'passingRate',
+            'recentEnrollments'
+        ));
+    }
 }

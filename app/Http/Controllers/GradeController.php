@@ -33,8 +33,31 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'enrollment_id' => 'required|exists:enrollments,id',
-            'midterm' => 'required|numeric|min:0|max:100',
-            'final' => 'required|numeric|min:0|max:100',
+            'midterm' => [
+                'required',
+                'numeric',
+                'min:1.00',
+                'max:5.00',
+                function ($attribute, $value, $fail) {
+                    // Check if the value follows the 0.25 increment pattern
+                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
+                    if (!$valid) {
+                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
+                    }
+                }
+            ],
+            'final' => [
+                'required',
+                'numeric',
+                'min:1.00',
+                'max:5.00',
+                function ($attribute, $value, $fail) {
+                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
+                    if (!$valid) {
+                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
+                    }
+                }
+            ],
         ]);
 
         Grade::create($validated);
@@ -66,8 +89,31 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'enrollment_id' => 'required|exists:enrollments,id',
-            'midterm' => 'required|numeric|min:0|max:100',
-            'final' => 'required|numeric|min:0|max:100',
+            'midterm' => [
+                'required',
+                'numeric',
+                'min:1.00',
+                'max:5.00',
+                function ($attribute, $value, $fail) {
+                    // Check if the value follows the 0.25 increment pattern
+                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
+                    if (!$valid) {
+                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
+                    }
+                }
+            ],
+            'final' => [
+                'required',
+                'numeric',
+                'min:1.00',
+                'max:5.00',
+                function ($attribute, $value, $fail) {
+                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
+                    if (!$valid) {
+                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
+                    }
+                }
+            ],
         ]);
 
         // Calculate final grade and remarks
@@ -90,7 +136,7 @@ class GradeController extends Controller
 
     private function calculateRemarks($grade): string
     {
-        if ($grade >= 75) {
+        if ($grade <= 3.00) {
             return 'Passed';
         }
         return 'Failed';

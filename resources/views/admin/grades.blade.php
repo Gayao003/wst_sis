@@ -37,7 +37,7 @@
                         <td>{{ $enrollment->semester }}</td>
                         <td>{{ $enrollment->grade->midterm ?? '' }}</td>
                         <td>{{ $enrollment->grade->final ?? '' }}</td>
-                        <td>{{ $enrollment->grade->total_grade ?? '' }}</td>
+                        <td>{{ $enrollment->grade ? number_format($enrollment->grade->total_grade, 2) : '' }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editGradeModal{{ $enrollment->id }}">
                                 <i class="fas fa-edit"></i>
@@ -60,20 +60,32 @@
                 <h5 class="modal-title">Update Grade</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.grades.store') }}" method="POST">
+            <form action="{{ route('admin.grades.update', $enrollment->grade ? $enrollment->grade->id : 'new') }}" method="POST">
                 @csrf
-                @if($enrollment->grade)
-                    @method('PUT')
-                @endif
+                @method('PUT')
                 <input type="hidden" name="enrollment_id" value="{{ $enrollment->id }}">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Midterm</label>
-                        <input type="number" step="0.01" class="form-control" name="midterm" value="{{ $enrollment->grade->midterm ?? '' }}" required>
+                        <select class="form-control" name="midterm" required>
+                            @for($grade = 1.00; $grade <= 5.00; $grade += 0.25)
+                                <option value="{{ number_format($grade, 2) }}" 
+                                    {{ isset($enrollment->grade->midterm) && $enrollment->grade->midterm == $grade ? 'selected' : '' }}>
+                                    {{ number_format($grade, 2) }}
+                                </option>
+                            @endfor
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Final</label>
-                        <input type="number" step="0.01" class="form-control" name="final" value="{{ $enrollment->grade->final ?? '' }}" required>
+                        <select class="form-control" name="final" required>
+                            @for($grade = 1.00; $grade <= 5.00; $grade += 0.25)
+                                <option value="{{ number_format($grade, 2) }}" 
+                                    {{ isset($enrollment->grade->final) && $enrollment->grade->final == $grade ? 'selected' : '' }}>
+                                    {{ number_format($grade, 2) }}
+                                </option>
+                            @endfor
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

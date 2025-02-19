@@ -25,7 +25,20 @@ class Grade extends Model
 
         static::saving(function ($grade) {
             if ($grade->midterm && $grade->final) {
-                $grade->total_grade = ($grade->midterm + $grade->final) / 2;
+                // Calculate average
+                $average = ($grade->midterm + $grade->final) / 2;
+                
+                // Different rounding based on grade range
+                if ($average <= 3.00) {
+                    // Round up to next 0.25 for passing grades
+                    $grade->total_grade = ceil($average * 4) / 4;
+                } else {
+                    // Round down to previous 0.25 for failing grades
+                    $grade->total_grade = floor($average * 4) / 4;
+                }
+
+                // Set remarks based on total grade
+                $grade->remarks = $grade->total_grade <= 3.00 ? 'Passed' : 'Failed';
             }
         });
     }

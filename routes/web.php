@@ -16,13 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {
         // Dashboard
-        Route::get('/dashboard', function () {
-            if (auth()->user()->role !== 'admin') {
-                return redirect()->route('student.dashboard');
-            }
-            $students = \App\Models\User::where('role', 'student')->get();
-            return view('admin.dashboard', compact('students'));
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // CRUD Routes for all modules
         Route::resource('students', StudentController::class);
