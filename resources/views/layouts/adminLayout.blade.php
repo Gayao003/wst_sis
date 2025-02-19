@@ -12,6 +12,8 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
         <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -49,8 +51,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" 
-                               href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -58,30 +59,26 @@
                             <div class="sb-sidenav-menu-heading">Management</div>
                             
                             <!-- Students Module -->
-                            <a class="nav-link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}" 
-                               href="{{ route('admin.students.index') }}">
+                            <a class="nav-link" href="{{ route('admin.students.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                 Students
                             </a>
 
                             <!-- Subjects Module -->
-                            <a class="nav-link {{ request()->routeIs('admin.subjects.*') ? 'active' : '' }}" 
-                               href="{{ route('admin.subjects.index') }}">
+                            <a class="nav-link" href="{{ route('admin.subjects.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Subjects
                             </a>
 
                             <!-- Enrollments Module -->
-                            <a class="nav-link {{ request()->routeIs('admin.enrollments.*') ? 'active' : '' }}" 
-                               href="{{ route('admin.enrollments.index') }}">
+                            <a class="nav-link" href="{{ route('admin.enrollments.index') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
-                                Enrollments
+                                Enrollment
                             </a>
 
                             <!-- Grades Module -->
-                            <a class="nav-link {{ request()->routeIs('admin.grades.*') ? 'active' : '' }}" 
-                               href="{{ route('admin.grades.index') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                            <a class="nav-link" href="{{ route('admin.grades.index') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
                                 Grades
                             </a>
                         </div>
@@ -134,5 +131,9 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
     </body>
 </html>

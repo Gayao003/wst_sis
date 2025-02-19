@@ -44,7 +44,7 @@
                             <form action="{{ route('admin.subjects.destroy', $subject->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this subject?')">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
@@ -63,7 +63,39 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
-                                        @include('admin.subjects._form', ['subject' => $subject])
+                                        <div class="mb-3">
+                                            <label class="form-label">Subject Code</label>
+                                            <input type="text" class="form-control" name="code" value="{{ $subject->code }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Subject Name</label>
+                                            <input type="text" class="form-control" name="name" value="{{ $subject->name }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" name="description">{{ $subject->description }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Units</label>
+                                            <input type="number" class="form-control" name="units" value="{{ $subject->units }}" min="1" max="5" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Semester</label>
+                                            <select class="form-select" name="semester" required>
+                                                <option value="First" {{ $subject->semester == 'First' ? 'selected' : '' }}>First</option>
+                                                <option value="Second" {{ $subject->semester == 'Second' ? 'selected' : '' }}>Second</option>
+                                                <option value="Summer" {{ $subject->semester == 'Summer' ? 'selected' : '' }}>Summer</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Year Level</label>
+                                            <select class="form-select" name="year_level" required>
+                                                <option value="First Year" {{ $subject->year_level == 'First Year' ? 'selected' : '' }}>First Year</option>
+                                                <option value="Second Year" {{ $subject->year_level == 'Second Year' ? 'selected' : '' }}>Second Year</option>
+                                                <option value="Third Year" {{ $subject->year_level == 'Third Year' ? 'selected' : '' }}>Third Year</option>
+                                                <option value="Fourth Year" {{ $subject->year_level == 'Fourth Year' ? 'selected' : '' }}>Fourth Year</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -91,7 +123,39 @@
             <form action="{{ route('admin.subjects.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    @include('admin.subjects._form')
+                    <div class="mb-3">
+                        <label class="form-label">Subject Code</label>
+                        <input type="text" class="form-control" name="code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Units</label>
+                        <input type="number" class="form-control" name="units" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Semester</label>
+                        <select class="form-select" name="semester" required>
+                            <option value="First">First</option>
+                            <option value="Second">Second</option>
+                            <option value="Summer">Summer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Year Level</label>
+                        <select class="form-select" name="year_level" required>
+                            <option value="First Year">First Year</option>
+                            <option value="Second Year">Second Year</option>
+                            <option value="Third Year">Third Year</option>
+                            <option value="Fourth Year">Fourth Year</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -101,6 +165,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('scripts')
@@ -111,29 +176,7 @@ $(document).ready(function() {
         responsive: true,
         dom: 'Bfrtip',
         buttons: [
-            {
-                extend: 'copy',
-                className: 'btn btn-secondary btn-sm'
-            },
-            {
-                extend: 'excel',
-                className: 'btn btn-secondary btn-sm'
-            },
-            {
-                extend: 'pdf',
-                className: 'btn btn-secondary btn-sm'
-            },
-            {
-                extend: 'print',
-                className: 'btn btn-secondary btn-sm'
-            }
-        ],
-        columnDefs: [
-            {
-                targets: -1,
-                orderable: false,
-                searchable: false
-            }
+            'copy', 'excel', 'pdf', 'print'
         ]
     });
 

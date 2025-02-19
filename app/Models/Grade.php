@@ -10,8 +10,8 @@ class Grade extends Model
     protected $fillable = [
         'enrollment_id',
         'midterm',
-        'finals',
-        'final_grade',
+        'final',
+        'grade',
         'remarks'
     ];
 
@@ -25,19 +25,19 @@ class Grade extends Model
         parent::boot();
 
         static::saving(function ($grade) {
-            if ($grade->midterm && $grade->finals) {
-                $grade->final_grade = ($grade->midterm + $grade->finals) / 2;
+            if ($grade->midterm && $grade->final) {
+                $grade->grade = ($grade->midterm + $grade->final) / 2;
                 
                 // BukSU Grading System
-                if ($grade->final_grade >= 97) $grade->remarks = '1.00';
-                elseif ($grade->final_grade >= 94) $grade->remarks = '1.25';
-                elseif ($grade->final_grade >= 91) $grade->remarks = '1.50';
-                elseif ($grade->final_grade >= 88) $grade->remarks = '1.75';
-                elseif ($grade->final_grade >= 85) $grade->remarks = '2.00';
-                elseif ($grade->final_grade >= 82) $grade->remarks = '2.25';
-                elseif ($grade->final_grade >= 79) $grade->remarks = '2.50';
-                elseif ($grade->final_grade >= 76) $grade->remarks = '2.75';
-                elseif ($grade->final_grade >= 75) $grade->remarks = '3.00';
+                if ($grade->grade >= 97) $grade->remarks = '1.00';
+                elseif ($grade->grade >= 94) $grade->remarks = '1.25';
+                elseif ($grade->grade >= 91) $grade->remarks = '1.50';
+                elseif ($grade->grade >= 88) $grade->remarks = '1.75';
+                elseif ($grade->grade >= 85) $grade->remarks = '2.00';
+                elseif ($grade->grade >= 82) $grade->remarks = '2.25';
+                elseif ($grade->grade >= 79) $grade->remarks = '2.50';
+                elseif ($grade->grade >= 76) $grade->remarks = '2.75';
+                elseif ($grade->grade >= 75) $grade->remarks = '3.00';
                 else $grade->remarks = '5.00';
             }
         });
