@@ -31,7 +31,7 @@
             </button>
         </div>
         <div class="card-body">
-            <table id="enrollmentsTable" class="table table-bordered table-striped">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Student ID</th>
@@ -225,7 +225,7 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $('#enrollmentsTable').DataTable({
+    $('#datatablesSimple').DataTable({
         pageLength: 10,
         responsive: true,
         dom: 'Bfrtip',

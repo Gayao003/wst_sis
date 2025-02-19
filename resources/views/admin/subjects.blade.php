@@ -16,7 +16,7 @@
             </button>
         </div>
         <div class="card-body">
-            <table id="subjectsTable" class="table table-bordered table-striped">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Code</th>
@@ -171,7 +171,7 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $('#subjectsTable').DataTable({
+    $('#datatablesSimple').DataTable({
         pageLength: 10,
         responsive: true,
         dom: 'Bfrtip',

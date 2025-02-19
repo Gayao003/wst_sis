@@ -10,13 +10,13 @@
     
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <div><i class="fas fa-users me-1"></i> Students List</div>
+            <div><i class="fas fa-table me-1"></i> Students List</div>
             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addStudentModal">
                 <i class="fas fa-plus"></i> Add New Student
             </button>
         </div>
         <div class="card-body">
-            <table id="studentsTable" class="table table-bordered table-striped">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Student ID</th>
@@ -27,6 +27,16 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Year & Section</th>
+                        <th>Actions</th>
+                    </tr>
+                </tfoot>
                 <tbody>
                     @foreach($students as $student)
                     <tr>
@@ -198,50 +208,6 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-    $('#studentsTable').DataTable({
-        pageLength: 10,
-        responsive: true,
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 'pdf', 'print'
-        ]
-    });
-
-    // Phone number formatting
-    $('.phone-input').on('input', function(e) {
-        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-        if (value.length > 9) value = value.slice(0, 9);
-        
-        let formattedValue = '';
-        if (value.length >= 3) {
-            formattedValue += value.slice(0, 3) + ' ';
-        } else {
-            formattedValue += value;
-        }
-        
-        if (value.length >= 7) {
-            formattedValue += value.slice(3, 7) + ' ';
-            formattedValue += value.slice(7);
-        } else if (value.length > 3) {
-            formattedValue += value.slice(3);
-        }
-        
-        e.target.value = formattedValue;
-    });
-
-    // Show validation errors in modals if they exist
-    @if($errors->any())
-        var modal = new bootstrap.Modal(document.getElementById('addStudentModal'));
-        modal.show();
-    @endif
-});
-</script>
-@endpush
-
 @push('styles')
 <style>
     .input-group-text {

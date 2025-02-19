@@ -13,7 +13,7 @@
             <i class="fas fa-star me-1"></i> Student Grades
         </div>
         <div class="card-body">
-            <table id="gradesTable" class="table table-bordered table-striped">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Student ID</th>
@@ -99,18 +99,3 @@
 @endforeach
 
 @endsection
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-    $('#gradesTable').DataTable({
-        pageLength: 10,
-        responsive: true,
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 'pdf', 'print'
-        ]
-    });
-});
-</script>
-@endpush
