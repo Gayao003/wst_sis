@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -53,7 +54,7 @@ class StudentController extends Controller
                 'birth_date' => $validated['birth_date'],
                 'address' => $validated['address'],
                 'role' => 'student',
-                'password' => bcrypt('password123'), // Default password
+                'password' => Hash::make('password123'), // Changed from bcrypt to Hash::make
             ]);
 
             Student::create([
