@@ -28,12 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student routes
     Route::prefix('student')->name('student.')->group(function () {
         // Dashboard
-        Route::get('/dashboard', function () {
-            if (auth()->user()->role !== 'student') {
-                return redirect()->route('admin.dashboard');
-            }
-            return view('student.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('dashboard');
 
         // Grades - Read Only
         Route::get('/grades', [GradeController::class, 'studentIndex'])->name('grades.index');

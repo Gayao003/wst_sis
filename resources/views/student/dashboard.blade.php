@@ -30,8 +30,7 @@
                     <h5><i class="fas fa-calendar-alt me-2"></i>Current Enrollment</h5>
                     <div class="mt-3">
                         <p class="mb-1">School Year: {{ date('Y') }}-{{ date('Y')+1 }}</p>
-                        <p class="mb-1">Semester: @getCurrentSemester</p>
-                        <p class="mb-1">Total Units: {{ $currentUnits ?? 0 }}</p>
+                        <p class="mb-1">Semester: {{ $currentSemester }}</p>
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
@@ -41,23 +40,6 @@
             </div>
         </div>
 
-        <!-- Academic Progress Card -->
-        <div class="col-xl-4 col-md-6">
-            <div class="card bg-info text-white mb-4">
-                <div class="card-body">
-                    <h5><i class="fas fa-chart-line me-2"></i>Academic Progress</h5>
-                    <div class="mt-3">
-                        <p class="mb-1">Total Subjects: {{ $totalSubjects ?? 0 }}</p>
-                        <p class="mb-1">Passed: {{ $passedSubjects ?? 0 }}</p>
-                        <p class="mb-1">Current GPA: {{ number_format($gpa ?? 0, 2) }}</p>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('student.grades.index') }}">View Grades</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Recent Grades Table -->

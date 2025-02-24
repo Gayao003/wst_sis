@@ -158,13 +158,14 @@ class StudentController extends Controller
         $student = auth()->user()->student;
         
         // Get current enrollment data
-        $currentEnrollments = $student->enrollments()
+        $currentEnrollment = $student->enrollments()
             ->where('school_year', date('Y').'-'.(date('Y')+1))
-            ->where('semester', getCurrentSemester())
-            ->with('subject')
-            ->get();
+            ->latest()
+            ->first();
         
-        $currentUnits = $currentEnrollments->sum('subject.units');
+        $currentSemester = $currentEnrollment ? $currentEnrollment->semester : 'First';
+        
+        $currentUnits = $currentEnrollment ? $currentEnrollment->subject->units : 0;
         
         // Get academic progress
         $totalSubjects = $student->enrollments()->count();
@@ -196,7 +197,8 @@ class StudentController extends Controller
             'totalSubjects',
             'passedSubjects',
             'gpa',
-            'recentGrades'
+            'recentGrades',
+            'currentSemester'
         ));
     }
 }

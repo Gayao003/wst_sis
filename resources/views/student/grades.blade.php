@@ -38,12 +38,24 @@
                         <td>{{ $enrollment->grade->final ?? 'N/A' }}</td>
                         <td>{{ $enrollment->grade->total_grade ?? 'N/A' }}</td>
                         <td>
-                            @if(isset($enrollment->grade->total_grade))
-                                @if($enrollment->grade->total_grade <= 3.0)
-                                    <span class="text-success">PASSED</span>
-                                @else
-                                    <span class="text-danger">FAILED</span>
-                                @endif
+                            @if(isset($enrollment->grade))
+                                @switch($enrollment->grade->status)
+                                    @case('FDA')
+                                        <span class="text-danger">FAILED (FDA)</span>
+                                        @break
+                                    @case('LOA')
+                                        <span class="text-warning">LEAVE OF ABSENCE</span>
+                                        @break
+                                    @case('INC')
+                                        <span class="text-info">INCOMPLETE</span>
+                                        @break
+                                    @default
+                                        @if($enrollment->grade->total_grade <= 3.0)
+                                            <span class="text-success">PASSED</span>
+                                        @else
+                                            <span class="text-danger">FAILED</span>
+                                        @endif
+                                @endswitch
                             @else
                                 <span class="text-muted">PENDING</span>
                             @endif

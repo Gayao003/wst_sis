@@ -37,7 +37,23 @@
                         <td>{{ $enrollment->semester }}</td>
                         <td>{{ $enrollment->grade->midterm ?? '' }}</td>
                         <td>{{ $enrollment->grade->final ?? '' }}</td>
-                        <td>{{ $enrollment->grade ? number_format($enrollment->grade->total_grade, 2) : '' }}</td>
+                        <td>
+                            @if($enrollment->grade)
+                                @switch($enrollment->grade->status)
+                                    @case('FDA')
+                                        5.00 (FDA)
+                                        @break
+                                    @case('LOA')
+                                        LOA
+                                        @break
+                                    @case('INC')
+                                        INC
+                                        @break
+                                    @default
+                                        {{ number_format($enrollment->grade->total_grade, 2) }}
+                                @endswitch
+                            @endif
+                        </td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editGradeModal{{ $enrollment->id }}">
                                 <i class="fas fa-edit"></i>
@@ -68,23 +84,34 @@
                     <div class="mb-3">
                         <label class="form-label">Midterm</label>
                         <select class="form-control" name="midterm" required>
-                            @for($grade = 1.00; $grade <= 5.00; $grade += 0.25)
+                            @for($grade = 1.00; $grade <= 3.00; $grade += 0.25)
                                 <option value="{{ number_format($grade, 2) }}" 
                                     {{ isset($enrollment->grade->midterm) && $enrollment->grade->midterm == $grade ? 'selected' : '' }}>
                                     {{ number_format($grade, 2) }}
                                 </option>
                             @endfor
+                            <option value="5.00" {{ isset($enrollment->grade->midterm) && $enrollment->grade->midterm == 5.00 ? 'selected' : '' }}>5.00</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Final</label>
                         <select class="form-control" name="final" required>
-                            @for($grade = 1.00; $grade <= 5.00; $grade += 0.25)
+                            @for($grade = 1.00; $grade <= 3.00; $grade += 0.25)
                                 <option value="{{ number_format($grade, 2) }}" 
                                     {{ isset($enrollment->grade->final) && $enrollment->grade->final == $grade ? 'selected' : '' }}>
                                     {{ number_format($grade, 2) }}
                                 </option>
                             @endfor
+                            <option value="5.00" {{ isset($enrollment->grade->final) && $enrollment->grade->final == 5.00 ? 'selected' : '' }}>5.00</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" name="status" required>
+                            <option value="Regular" {{ isset($enrollment->grade->status) && $enrollment->grade->status == 'Regular' ? 'selected' : '' }}>Regular</option>
+                            <option value="FDA" {{ isset($enrollment->grade->status) && $enrollment->grade->status == 'FDA' ? 'selected' : '' }}>FDA (Failure Due to Absences)</option>
+                            <option value="LOA" {{ isset($enrollment->grade->status) && $enrollment->grade->status == 'LOA' ? 'selected' : '' }}>LOA (Leave of Absence)</option>
+                            <option value="INC" {{ isset($enrollment->grade->status) && $enrollment->grade->status == 'INC' ? 'selected' : '' }}>INC (Incomplete)</option>
                         </select>
                     </div>
                 </div>

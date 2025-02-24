@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('midterm', 3, 2)->nullable();
             $table->decimal('final', 3, 2)->nullable();
             $table->decimal('total_grade', 3, 2)->nullable();
+            $table->enum('status', ['Regular', 'FDA', 'LOA', 'INC'])->default('Regular');
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

@@ -33,30 +33,18 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'enrollment_id' => 'required|exists:enrollments,id',
+            'status' => 'required|in:Regular,FDA,LOA,INC',
             'midterm' => [
-                'required',
+                'required_if:status,Regular',
+                'nullable',
                 'numeric',
-                'min:1.00',
-                'max:5.00',
-                function ($attribute, $value, $fail) {
-                    // Check if the value follows the 0.25 increment pattern
-                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
-                    if (!$valid) {
-                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
-                    }
-                }
+                'in:1.00,1.25,1.50,1.75,2.00,2.25,2.50,2.75,3.00,5.00'
             ],
             'final' => [
-                'required',
+                'required_if:status,Regular',
+                'nullable',
                 'numeric',
-                'min:1.00',
-                'max:5.00',
-                function ($attribute, $value, $fail) {
-                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
-                    if (!$valid) {
-                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
-                    }
-                }
+                'in:1.00,1.25,1.50,1.75,2.00,2.25,2.50,2.75,3.00,5.00'
             ],
         ]);
 
@@ -89,39 +77,20 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'enrollment_id' => 'required|exists:enrollments,id',
+            'status' => 'required|in:Regular,FDA,LOA,INC',
             'midterm' => [
-                'required',
+                'required_if:status,Regular',
+                'nullable',
                 'numeric',
-                'min:1.00',
-                'max:5.00',
-                function ($attribute, $value, $fail) {
-                    // Check if the value follows the 0.25 increment pattern
-                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
-                    if (!$valid) {
-                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
-                    }
-                }
+                'in:1.00,1.25,1.50,1.75,2.00,2.25,2.50,2.75,3.00,5.00'
             ],
             'final' => [
-                'required',
+                'required_if:status,Regular',
+                'nullable',
                 'numeric',
-                'min:1.00',
-                'max:5.00',
-                function ($attribute, $value, $fail) {
-                    $valid = round(($value - 1.00) / 0.25) * 0.25 + 1.00 == $value;
-                    if (!$valid) {
-                        $fail('The grade must be in increments of 0.25 (e.g., 1.00, 1.25, 1.50, etc.)');
-                    }
-                }
+                'in:1.00,1.25,1.50,1.75,2.00,2.25,2.50,2.75,3.00,5.00'
             ],
         ]);
-
-        // Calculate final grade and remarks
-        $grade = ($validated['midterm'] + $validated['final']) / 2;
-        $remarks = $this->calculateRemarks($grade);
-
-        $validated['grade'] = $grade;
-        $validated['remarks'] = $remarks;
 
         if ($id === 'new') {
             Grade::create($validated);

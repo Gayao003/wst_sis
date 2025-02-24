@@ -11,7 +11,9 @@ class Grade extends Model
         'enrollment_id',
         'midterm',
         'final',
-        'total_grade'
+        'total_grade',
+        'status',
+        'remarks'
     ];
 
     public function enrollment(): BelongsTo
@@ -24,20 +26,39 @@ class Grade extends Model
         parent::boot();
 
         static::saving(function ($grade) {
+            if ($grade->status === 'FDA') {
+                $grade->total_grade = 5.00;
+                $grade->remarks = 'Failed (FDA)';
+                return;
+            }
+
+            if ($grade->status === 'LOA') {
+                $grade->total_grade = null;
+                $grade->remarks = 'Leave of Absence';
+                return;
+            }
+
+            if ($grade->status === 'INC') {
+                $grade->total_grade = null;
+                $grade->remarks = 'Incomplete';
+                return;
+            }
+
             if ($grade->midterm && $grade->final) {
-                // Calculate average
-                $average = ($grade->midterm + $grade->final) / 2;
-                
-                // Different rounding based on grade range
-                if ($average <= 3.00) {
-                    // Round up to next 0.25 for passing grades
-                    $grade->total_grade = ceil($average * 4) / 4;
-                } else {
-                    // Round down to previous 0.25 for failing grades
-                    $grade->total_grade = floor($average * 4) / 4;
+                // If either grade is above 3.00, set total grade to 5.00
+                if ($grade->midterm > 3.00 || $grade->final > 3.00) {
+                    $grade->total_grade = 5.00;
+                    $grade->remarks = 'Failed';
+                    return;
                 }
 
-                // Set remarks based on total grade
+                // Calculate average for passing grades
+                $average = ($grade->midterm + $grade->final) / 2;
+                
+                // Round up to next 0.25
+                $grade->total_grade = ceil($average * 4) / 4;
+                
+                // Set remarks
                 $grade->remarks = $grade->total_grade <= 3.00 ? 'Passed' : 'Failed';
             }
         });
