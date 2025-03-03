@@ -36,10 +36,12 @@ class RegisteredUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:13'],
+            'phone' => ['nullable', 'string', 'max:13'],
             'birth_date' => ['required', 'date'],
-            'address' => ['required', 'string'],
-            'role' => ['required', 'string', 'in:student,admin'],
+            'student_id' => ['required', 'string', 'unique:students,student_id'],
+            'course' => ['required', 'string'],
+            'year_level' => ['required', 'integer', 'min:1', 'max:5'],
+            'section' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -49,38 +51,23 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'birth_date' => $request->birth_date,
-            'address' => $request->address,
-            'role' => $request->role,
+            'role' => 'student',
             'password' => Hash::make($request->password),
         ]);
 
-        // Create corresponding record based on role
-        if ($request->role === 'student') {
-            Student::create([
-                'user_id' => $user->id,
-                'student_id' => 'STU' . str_pad($user->id, 5, '0', STR_PAD_LEFT),
-                'course' => 'Not Set',
-                'year_level' => 1,
-                'section' => 'Not Set'
-            ]);
-        } elseif ($request->role === 'admin') {
-            Admin::create([
-                'user_id' => $user->id,
-                'employee_id' => 'EMP' . str_pad($user->id, 5, '0', STR_PAD_LEFT),
-                'department' => 'Not Set',
-                'position' => 'Not Set'
-            ]);
-        }
+        // Create student record
+        Student::create([
+            'user_id' => $user->id,
+            'student_id' => $request->student_id,
+            'course' => $request->course,
+            'year_level' => $request->year_level,
+            'section' => $request->section
+        ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        // Redirect based on role
-        if ($request->role === 'student') {
-            return redirect()->route('student.dashboard');
-        } else {
-            return redirect()->route('admin.dashboard');
-        }
+        return redirect()->route('student.dashboard');
     }
 }

@@ -60,10 +60,9 @@
                                                     <span class="input-group-text">+63</span>
                                                     <input class="form-control" id="inputPhone" type="tel" name="phone" 
                                                         value="{{ old('phone') }}" 
-                                                        placeholder="Phone Number" 
+                                                        placeholder="Phone Number (Optional)" 
                                                         pattern="[0-9]{3} [0-9]{4} [0-9]{3}"
-                                                        maxlength="13"
-                                                        required />
+                                                        maxlength="13" />
                                                 </div>
                                                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                                             </div>
@@ -73,18 +72,24 @@
                                                 <x-input-error :messages="$errors->get('birth_date')" class="mt-2" />
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <textarea class="form-control" id="inputAddress" name="address" placeholder="Enter your address" style="height: 100px" required>{{ old('address') }}</textarea>
-                                                <label for="inputAddress">Address</label>
-                                                <x-input-error :messages="$errors->get('address')" class="mt-2" />
+                                                <input class="form-control" id="inputStudentId" type="text" name="student_id" value="{{ old('student_id') }}" placeholder="Enter your student ID" required />
+                                                <label for="inputStudentId">Student ID</label>
+                                                <x-input-error :messages="$errors->get('student_id')" class="mt-2" />
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <select class="form-select" id="inputRole" name="role" required>
-                                                    <option value="" selected disabled>Select your role</option>
-                                                    <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
-                                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                                </select>
-                                                <label for="inputRole">Role</label>
-                                                <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                                                <input class="form-control" id="inputCourse" type="text" name="course" value="{{ old('course') }}" placeholder="Enter your course" required />
+                                                <label for="inputCourse">Course</label>
+                                                <x-input-error :messages="$errors->get('course')" class="mt-2" />
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" id="inputYearLevel" type="number" name="year_level" value="{{ old('year_level') }}" placeholder="Enter your year level" min="1" max="5" required />
+                                                <label for="inputYearLevel">Year Level</label>
+                                                <x-input-error :messages="$errors->get('year_level')" class="mt-2" />
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" id="inputSection" type="text" name="section" value="{{ old('section') }}" placeholder="Enter your section" required />
+                                                <label for="inputSection">Section</label>
+                                                <x-input-error :messages="$errors->get('section')" class="mt-2" />
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">

@@ -37,14 +37,15 @@ class StudentController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
+            'student_id' => 'required|string|unique:students,student_id',
+            'password' => 'required|string|min:6',
             'phone' => [
-                'required',
+                'nullable',
                 'string',
                 'regex:/^[0-9]{3} [0-9]{4} [0-9]{3}$/',
                 'max:13'
             ],
             'birth_date' => 'required|date',
-            'address' => 'required|string',
             'course' => 'required|string',
             'year_level' => 'required|integer|min:1|max:5',
             'section' => 'required|string',
@@ -57,14 +58,13 @@ class StudentController extends Controller
                 'email' => $validated['email'],
                 'phone' => $validated['phone'],
                 'birth_date' => $validated['birth_date'],
-                'address' => $validated['address'],
                 'role' => 'student',
-                'password' => Hash::make('password123'), // Changed from bcrypt to Hash::make
+                'password' => Hash::make($validated['password']),
             ]);
 
             Student::create([
                 'user_id' => $user->id,
-                'student_id' => 'STU' . str_pad($user->id, 5, '0', STR_PAD_LEFT),
+                'student_id' => $validated['student_id'],
                 'course' => $validated['course'],
                 'year_level' => $validated['year_level'],
                 'section' => $validated['section'],

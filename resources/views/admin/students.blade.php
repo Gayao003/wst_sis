@@ -22,6 +22,7 @@
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Phone</th>
                         <th>Course</th>
                         <th>Year & Section</th>
                         <th>Actions</th>
@@ -32,6 +33,7 @@
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Phone</th>
                         <th>Course</th>
                         <th>Year & Section</th>
                         <th>Actions</th>
@@ -43,6 +45,7 @@
                         <td>{{ $student->student_id }}</td>
                         <td>{{ $student->user->first_name }} {{ $student->user->last_name }}</td>
                         <td>{{ $student->user->email }}</td>
+                        <td>{{ $student->user->phone }}</td>
                         <td>{{ $student->course }}</td>
                         <td>{{ $student->year_level }}-{{ $student->section }}</td>
                         <td>
@@ -109,10 +112,6 @@
                                             <input type="date" class="form-control" name="birth_date" value="{{ $student->user->birth_date }}" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <textarea class="form-control" name="address" required>{{ $student->user->address }}</textarea>
-                                        </div>
-                                        <div class="mb-3">
                                             <label class="form-label">Course</label>
                                             <input type="text" class="form-control" name="course" value="{{ $student->course }}" required>
                                         </div>
@@ -164,6 +163,14 @@
                         <input type="email" class="form-control" name="email" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Student ID</label>
+                        <input type="text" class="form-control" name="student_id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Phone</label>
                         <div class="input-group">
                             <span class="input-group-text">+63</span>
@@ -174,17 +181,12 @@
                                    value="{{ old('phone') }}" 
                                    placeholder="XXX XXXX XXX" 
                                    pattern="[0-9]{3} [0-9]{4} [0-9]{3}"
-                                   maxlength="13"
-                                   required />
+                                   maxlength="13" />
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Birth Date</label>
                         <input type="date" class="form-control" name="birth_date" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea class="form-control" name="address" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Course</label>
