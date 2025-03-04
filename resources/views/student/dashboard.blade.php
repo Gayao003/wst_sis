@@ -33,10 +33,6 @@
                         <p class="mb-1">Semester: {{ $currentSemester }}</p>
                     </div>
                 </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('student.enrollment.show') }}">View Enrollment</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
             </div>
         </div>
 

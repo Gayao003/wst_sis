@@ -72,13 +72,6 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 My Subjects
                             </a>
-
-                            <!-- Enrollment Module -->
-                            <a class="nav-link {{ request()->routeIs('student.enrollment.*') ? 'active' : '' }}" 
-                               href="{{ route('student.enrollment.show') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
-                                Enrollment Information
-                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
